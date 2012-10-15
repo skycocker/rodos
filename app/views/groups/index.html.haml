@@ -1,0 +1,7 @@
+%div#groups
+
+:javascript
+  $(function() {
+    window.router = new Rodos.Routers.GroupsRouter({groups: #{@groups.to_json.html_safe}});
+    Backbone.history.start();
+  });
