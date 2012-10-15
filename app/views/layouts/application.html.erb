@@ -2,13 +2,34 @@
 <html>
 <head>
   <title>Rodos</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag    "application", media: "all" %>
   <%= csrf_meta_tags %>
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 <body>
+  <header class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <%= link_to "rodos", '#', id: "logo" %>
+        <nav>
+          <ul class="nav pull-right">
+            <li><%= link_to "Home", '#' %></li>
+            <li><%= link_to "Groups", '#' %></li>
+            <li><%= link_to "Users", '#' %></li>
+            <li><%= link_to "Todos", '#' %></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+      <%= yield %>
+  </div>
 
-<%= yield %>
-
+  <div id="javascripts">
+    <%= javascript_include_tag "application" %>
+  </div>
 </body>
 </html>

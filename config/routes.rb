@@ -1,4 +1,10 @@
 Rodos::Application.routes.draw do
+  root :to => 'StaticPages#home'
+  
+  resources :todos
+
+  resources :users
+
   resources :groups
 
   # The priority is based upon order of creation:
