@@ -1,0 +1,46 @@
+@import "bootstrap";
+@import "bootstrap-responsive";
+
+.navbar-inner {
+  .container {
+    a:hover {
+      background-color: $navbarBackground;
+    }
+    #user-nav form {
+      margin: 0;
+    }
+  }
+}
+
+.grouplist {
+  a:hover {
+    color: $gray;
+  }
+}
+
+body {
+  /*temporary!*/
+  padding-top: 80px;
+}
+
+footer {
+  border-top: 1px solid $grayLight;
+  a {
+    color: $green;
+  }
+  a:hover {
+    background-color: #fff;
+    color: $green;
+    text-decoration: none;
+  }
+  .signature {
+    word-spacing: -1em;
+    text-transform: lowercase;
+    .first {
+      opacity: .6;
+    }
+    .second {
+      opacity: .9;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+%div.hero-unit
+  %h1 Welcome to Rodos
+  %p A missing remote todos app.
+  
+%div.row
+  %div.span3
+    %h2 
+    %p 
+    
+%footer
+  %a.signature{:href => "http://msiwek.com", :target => "_"}
+    %span.first Michał
+    %span.second Siwek

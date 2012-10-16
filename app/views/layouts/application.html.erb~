@@ -20,9 +20,9 @@
           <% if user_signed_in? %>
             <%= button_to "Sign out #{current_user.email}", destroy_user_session_path, method: :delete, class: 'btn btn-primary' %>
           <% else %>
-            <%= button_to "Sign in", new_user_session_path, method: :get, class: 'btn btn-primary' %>
+            <%= button_to "Sign in", new_user_session_path, class: 'btn btn-primary' %>
             or
-            <%= button_to "Sign up", new_user_registration_path, method: :get, class: 'btn' %>
+            <%= button_to "Sign up", new_user_registration_path, class: 'btn' %>
           <% end %>
             </div>
         </div>

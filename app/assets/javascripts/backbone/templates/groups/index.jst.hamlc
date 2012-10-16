@@ -1,0 +1,4 @@
+%ul.grouplist.nav.nav-tabs
+  - for group in @groups
+    %li
+      %a{:href => '#'}= group.name

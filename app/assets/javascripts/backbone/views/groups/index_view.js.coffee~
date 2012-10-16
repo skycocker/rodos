@@ -11,6 +11,7 @@ class Rodos.Views.Groups.IndexView extends Backbone.View
 
   addOne: (group) =>
     view = new Rodos.Views.Groups.GroupView({model : group})
+    @$("ul").append(view.render().el)
 
   render: =>
     $(@el).html(@template(groups: @options.groups.toJSON() ))

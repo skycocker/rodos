@@ -1,0 +1,9 @@
+class Rodos.Routers.StaticPagesRouter extends Backbone.Router
+  routes:
+    "home"  : "home"
+    "index" : "home"
+    ".*"    : "home"
+    
+  home: ->
+    @view = new Rodos.Views.staticPages.NewView()
+    $("#staticPages").html(@view.render().el)

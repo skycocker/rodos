@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rodos</title>
+  <link href="/assets/application.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/groups.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/scaffolds.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/todos.css?body=1" media="all" rel="stylesheet" type="text/css" />
+<link href="/assets/users.css?body=1" media="all" rel="stylesheet" type="text/css" />
+  <script src="/assets/jquery.js?body=1" type="text/javascript"></script>
+<script src="/assets/jquery_ujs.js?body=1" type="text/javascript"></script>
+<script src="/assets/underscore.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone_rails_sync.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone_datalink.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/rodos.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/groups/edit.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/groups/group.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/groups/index.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/groups/new.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/groups/show.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/staticPages/home.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/todos/edit.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/todos/index.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/todos/new.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/todos/show.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/todos/todo.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/users/edit.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/users/index.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/users/new.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/users/show.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/templates/users/user.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/models/group.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/models/todo.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/models/user.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/groups/edit_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/groups/group_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/groups/index_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/groups/new_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/groups/show_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/staticPages/home_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/todos/edit_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/todos/index_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/todos/new_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/todos/show_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/todos/todo_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/users/edit_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/users/index_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/users/new_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/users/show_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/views/users/user_view.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/routers/groups_router.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/routers/staticPages_router.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/routers/todos_router.js?body=1" type="text/javascript"></script>
+<script src="/assets/backbone/routers/users_router.js?body=1" type="text/javascript"></script>
+<script src="/assets/hamlcoffee.js?body=1" type="text/javascript"></script>
+<script src="/assets/groups.js?body=1" type="text/javascript"></script>
+<script src="/assets/todos.js?body=1" type="text/javascript"></script>
+<script src="/assets/users.js?body=1" type="text/javascript"></script>
+<script src="/assets/application.js?body=1" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="staticPages"></div>
+
+<script type="text/javascript">
+  $(function() {
+    window.router = new Rodos.Routers.StaticPagesRouter({staticPages: {});
+    Backbone.history.start();
+  });
+</script>
+</body>
+</html>
