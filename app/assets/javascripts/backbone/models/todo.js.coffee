@@ -1,9 +1,10 @@
 class Rodos.Models.Todo extends Backbone.Model
-  paramRoot: 'todo'
+  paramRoot: 'todos'
 
-  defaults:
-    title: null
+  #defaults:
+    
 
-class Rodos.Collections.TodosCollection extends Backbone.Collection
+class Rodos.Collections.Todos extends Backbone.Collection
   model: Rodos.Models.Todo
   url: '/todos'
+  

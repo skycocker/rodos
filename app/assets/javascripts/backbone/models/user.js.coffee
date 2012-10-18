@@ -1,10 +1,9 @@
 class Rodos.Models.User extends Backbone.Model
   paramRoot: 'user'
+  url: '/users/current'
 
   defaults:
-    name: null
-    email: null
-
-class Rodos.Collections.UsersCollection extends Backbone.Collection
-  model: Rodos.Models.User
-  url: '/users'
+    id: ""
+  
+  initialize: ->
+    @fetch({async: false})

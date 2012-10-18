@@ -1,6 +1,26 @@
 @import "bootstrap";
 @import "bootstrap-responsive";
 
+.todosContainer {
+  h1 {
+    small {
+      color: $grayLight;
+    }
+  }
+}
+
+.todos {
+  a, a:hover {
+    color: $linkColor;
+  }
+}
+
+.hero-unit {
+  .btn-primary {
+    color: #fff;
+  }
+}
+
 .navbar-inner {
   .container {
     a:hover {

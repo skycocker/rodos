@@ -1,0 +1,11 @@
+%div.row
+  %div.todosContainer.span4.offset4
+    %h1
+      %small current todos
+    %a.btn.btn-primary.pull-right
+      %i.icon-plus.icon-white
+      add new
+    %ul.todos.nav.nav-tabs.nav-stacked
+      - for todo in @todos
+        %li
+          %a= todo.title
