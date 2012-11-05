@@ -1,5 +1,12 @@
 %div.row
-  %div.todosContainer.span4.offset4
+  %div.groupsContainer.span3
+    %h1
+      %small your groups
+    %ul.groups.nav.nav-tabs.nav-stacked
+      - for group in @groups
+        %li
+          %a= group.name
+  %div.todosContainer.span4.offset1
     %h1
       %small current todos
     %a.btn.btn-primary.pull-right

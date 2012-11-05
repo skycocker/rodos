@@ -4,8 +4,10 @@ class TodosController < ApplicationController
   # GET /todos
   # GET /todos.json
   def index
-    @todos = Todo.all
-
+    current_user.groups.each do |group|
+      @todos = Todo.where(group_id: group.id)
+    end
+        
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @todos }

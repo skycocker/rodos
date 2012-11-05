@@ -9,6 +9,9 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid
   # attr_accessible :title, :body
   
+  has_many :relationships
+  has_many :groups, through: :relationships
+  
   before_save :ensure_authentication_token!
   
   def self.new_with_sessions(params, session)
