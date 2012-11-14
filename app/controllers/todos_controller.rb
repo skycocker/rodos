@@ -1,5 +1,6 @@
 class TodosController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :validate_group, only: [:show, :edit, :create, :update]
   
   # GET /todos
   # GET /todos.json
@@ -82,6 +83,15 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html { redirect_to todos_url }
       format.json { head :no_content }
+    end
+  end
+  
+  #before filter
+  def validate_group
+    unless current_user.groups.find_by_id(params[:todo][:group_id])
+      respond_to do |format|
+        format.json { render json: "Cannot access this group.", status: :unauthorized }
+      end
     end
   end
 end

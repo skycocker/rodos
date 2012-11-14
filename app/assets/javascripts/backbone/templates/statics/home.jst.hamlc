@@ -4,15 +4,23 @@
       %small your groups
     %ul.groups.nav.nav-tabs.nav-stacked
       - for group in @groups
-        %li
+        %li.group{data-id: group.id}
           %a= group.name
-  %div.todosContainer.span4.offset1
+  %div.newTodo.modal.offset1
+    %div.modal-header
+      %h1
+        %small new todo
+    %div.modal-body
+      %input.todo-title{type: "text", placeholder: "title"}
+    %div.modal-footer
+      %a.btn{href: "#"} close
+      %a.btn.btn-primary.createTodo post
+  
+  %div.todosContainer.span3.offset1
     %h1
       %small current todos
-    %a.btn.btn-primary.pull-right
-      %i.icon-plus.icon-white
-      add new
     %ul.todos.nav.nav-tabs.nav-stacked
       - for todo in @todos
-        %li
+        %li{data-id: todo.id}
           %a= todo.title
+            %i.icon-trash.deleteTodo.pull-right

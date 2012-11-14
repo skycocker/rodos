@@ -18,4 +18,5 @@
 //= require backbone_datalink
 //= require backbone/rodos
 //= require hamlcoffee
+//= require bootstrap
 //= require_tree .

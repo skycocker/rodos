@@ -9,16 +9,15 @@ class Rodos.Routers.RodosRouter extends Backbone.Router
   
   navStart: =>
     if user.id != ""
-      @home()
+      @groups = new Rodos.Collections.Groups()
+      @todos = new Rodos.Collections.Todos()
+      
+      @home(@groups, @todos)
     else
       @welcome()
         
   welcome: ->
-    @setView(Rodos.Views.Statics.WelcomeView)
+    @view = new Rodos.Views.Statics.WelcomeView()
 
-  home: ->
-    @setView(Rodos.Views.Statics.HomeView)
-    
-  setView: (view) =>
-    @view = new view()
-    $("#statics").html(@view.render().el)
+  home: (groups, todos) ->
+    @view = new Rodos.Views.Statics.HomeView(groups, todos)
