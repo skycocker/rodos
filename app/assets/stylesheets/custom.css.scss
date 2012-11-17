@@ -1,6 +1,32 @@
 @import "bootstrap";
 @import "bootstrap-responsive";
 
+body {
+  padding-top: 45px;
+}
+
+.hero-unit {
+  .btn-primary {
+    color: #fff;
+  }
+}
+
+#newTodo {
+  #new-todo-title {
+    width: 74.5%;
+  }
+  .caret {
+    border-top-color: #000;
+  }
+  ul.dropdown-menu {
+    span {
+      padding-left: 0.5em;
+      font-size: 1em;
+      color: $grayLight;
+    }
+  }
+}
+
 .todosContainer {
   h1 {
     small {
@@ -12,12 +38,6 @@
 ul {
   a, a:hover {
     color: $linkColor;
-  }
-}
-
-.hero-unit {
-  .btn-primary {
-    color: #fff;
   }
 }
 
@@ -36,11 +56,6 @@ ul {
   a:hover {
     color: $gray;
   }
-}
-
-body {
-  /*temporary! usually set to about 45px*/
-  padding-top: 80px;
 }
 
 footer {

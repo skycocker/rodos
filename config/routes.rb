@@ -6,6 +6,8 @@ Rodos::Application.routes.draw do
   match "/users" => 'users#index'
   match "/users/current" => 'users#current'
   
+  match "/groups/add_member" => 'groups#add_member'
+  
   resources :todos
   resources :groups
 end

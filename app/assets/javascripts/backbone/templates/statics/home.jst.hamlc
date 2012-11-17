@@ -2,24 +2,42 @@
   %div.groupsContainer.span3
     %h1
       %small your groups
-    %ul.groups.nav.nav-tabs.nav-stacked
-      - for group in @groups
-        %li.group{data-id: group.id}
-          %a= group.name
-  %div.newTodo.modal.offset1
+    %div.well.well-small
+      %ul.groups.nav.nav-list
+        %li.nav-header remote
+        - for group in @groups
+          %li.group{data-id: group.id}
+            %a= group.name
+              %i.addUser.icon-plus.pull-right
+  
+  %div#addUser.modal.hide
     %div.modal-header
-      %h1
-        %small new todo
+      %h1 add user
     %div.modal-body
-      %input.todo-title{type: "text", placeholder: "title"}
+      %input.user-email{type: "text", placeholder: "email address"}
     %div.modal-footer
-      %a.btn{href: "#"} close
-      %a.btn.btn-primary.createTodo post
+      %a.closeTodoPopup.btn close
+        %i.icon-remove
+      %a.createUser.btn.btn-primary add
+        %i.icon-plus.icon-white
   
   %div.todosContainer.span3.offset1
     %h1
       %small current todos
     %ul.todos.nav.nav-tabs.nav-stacked
+      %li#newTodo
+        %div.dropdown
+          %div.input-append
+            %input#new-todo-title{type: "text", placeholder: "new todo"}
+            %a.addTodoToCurrentGroup.add-on.btn{rel: "tooltip", title: "save to current group"}
+              %i.icon-plus
+            %a.pickTodoTargetGroup.add-on.btn.dropdown-toggle{data-toggle: "dropdown", rel: "tooltip", title: "pick a target group"}
+              %span.caret
+            %ul.dropdown-menu.pull-right
+              %span your groups
+              - for group in @groups
+                %li.destinationGroup{data-id: group.id}
+                  %a= group.name
       - for todo in @todos
         %li{data-id: todo.id}
           %a= todo.title

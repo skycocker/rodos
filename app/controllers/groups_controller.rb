@@ -82,4 +82,20 @@ class GroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def add_member
+    @newuser = User.find_by_email(params[:user_email])
+    @destGroup = Group.find_by_id(params[:id])
+    if @newuser && @destGroup
+      @relationship = Relationship.new(user_id: @newuser.id, group_id: @destGroup.id)
+      
+      respond_to do |format|
+        if @relationship.save
+          format.json { render json: "", status: :created }
+        else
+          format.json { render json: @relationship.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+  end
 end
