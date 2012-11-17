@@ -43,9 +43,11 @@ class GroupsController < ApplicationController
   # POST /groups.json
   def create
     @group = Group.new(params[:group])
-
+    
     respond_to do |format|
       if @group.save
+        @relationship = Relationship.create(user_id: current_user.id, group_id: @group.id)
+        
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
@@ -80,22 +82,6 @@ class GroupsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to groups_url }
       format.json { head :no_content }
-    end
-  end
-  
-  def add_member
-    @newuser = User.find_by_email(params[:user_email])
-    @destGroup = Group.find_by_id(params[:id])
-    if @newuser && @destGroup
-      @relationship = Relationship.new(user_id: @newuser.id, group_id: @destGroup.id)
-      
-      respond_to do |format|
-        if @relationship.save
-          format.json { render json: "", status: :created }
-        else
-          format.json { render json: @relationship.errors, status: :unprocessable_entity }
-        end
-      end
     end
   end
 end

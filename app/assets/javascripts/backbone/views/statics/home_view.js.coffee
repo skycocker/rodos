@@ -4,16 +4,21 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
   template: JST["backbone/templates/statics/home"]
   
   events:
+    #modify todos
     "click .group": "pickGroup"
     "click .addTodoToCurrentGroup": "createTodo"
-    "click .destinationGroup": "createTodo"
+    "click .todoDestinationGroup": "createTodo"
     "click .deleteTodo": "deleteTodo"
-    "click .createUser": "createUser"
+    #modify groups
+    "click .createGroup": "createGroup"
+    "click .addUserToCurrentGroup": "addUser"
+    "click .userDestinationGroup": "addUser"
+    "click .leaveGroup": "leaveGroup"
   
   initialize: (@groups, @todos) =>
     @groups.on("reset", @render)
     @groups.on("change", @render)
-    @todos.on("remove", @render)
+    @groups.on("remove", @render)
     @groups.fetch()
     
     @todos.on("reset", @render)
@@ -32,12 +37,11 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     
   createTodo: (event) =>
     clickedEl = $(event.target)
-    creatorEl = $(event.target).parent()
+    creatorEl = clickedEl.parent()
     
     if clickedEl.hasClass("addTodoToCurrentGroup") || creatorEl.hasClass("addTodoToCurrentGroup")
       if @groupId
         destinationGroup = @groupId
-        console.log(destinationGroup)
       else
         $('.pickTodoTargetGroup').dropdown()
     else
@@ -56,13 +60,62 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     todoId = todoEl.data("id")
     todo = @todos.get(todoId)
     todo.destroy()
-   
-  createUser: (event) =>
-    userEmail = $(".user-email").val()
+    
+  createGroup: =>
+    @groups.create
+      name: $("#new-group-name").val()
+    
+  addUser: (event) =>
+    clickedEl = $(event.target)
+    creatorEl = clickedEl.parent()
+    
+    if clickedEl.hasClass("addUserToCurrentGroup") || creatorEl.hasClass("addUserToCurrentGroup")
+      if @groupId
+        destinationGroup = @groupId
+      else
+        $('.pickUserTargetGroup').dropdown()
+    else
+      destinationGroup = creatorEl.data("id")
+      
+    destinationGroupName = @groups.get(destinationGroup).get("name")
+    userData = $("#new-user-data").val()
+    
     @newuser = new Rodos.Models.Relationship()
-    @newuser.set(user_email: userEmail)
-    @newuser.set(group_id: @destinationGroup)
-    @newuser.save()
+    @newuser.set(user_data: userData)
+    @newuser.set(id: destinationGroup)
+    @newuser.save({}, 
+      success: (model, response) ->
+        klass = "alert-success"
+        $("#flash").html("User "+userData+" has been added to group "+destinationGroupName+".")
+        $("#flash").addClass(klass).fadeIn("fast").delay(2000).fadeOut("fast")
+        setTimeout(->
+          $("#flash").removeClass(klass)
+        , 2300)
+      error: (model, response) ->
+        switch response.status
+          when 409
+            status = "info"
+          else
+            status = "error"
+        klass = "alert-"+status
+        $("#flash").html(response.responseText)
+        $("#flash").addClass(klass).fadeIn("fast").delay(2000).fadeOut("fast")
+        setTimeout(->
+          $("#flash").removeClass(klass)
+        , 2300)
+    )
+    
+  leaveGroup: (event) =>
+    clickedEl = $(event.target)
+    leaver = clickedEl.parent().parent()
+    destinationGroup = leaver.data("id")
+    
+    @leaving = new Rodos.Models.Relationship()
+    @leaving.set(id: destinationGroup)
+    @leaving.destroy()
+    
+    clickedEl.tooltip("hide")
+    @groups.remove(destinationGroup)
     
   render: =>
     $(@el).html(@template(

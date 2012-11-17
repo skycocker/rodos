@@ -1,26 +1,35 @@
+%div#flash.alert.hide  
 %div.row
   %div.groupsContainer.span3
     %h1
       %small your groups
     %div.well.well-small
       %ul.groups.nav.nav-list
-        %li.nav-header remote
+        %li#newGroup
+          %div.input-append
+            %input#new-group-name{type: "text", placeholder: "new group"}
+            %a.createGroup.add-on.btn
+              %i.icon-plus
+        %li#newUser
+          %div.dropdown
+            %div.input-append
+              %input#new-user-data{type: "text", placeholder: "add user"}
+              %a.addUserToCurrentGroup.add-on.btn{rel: "tooltip", title: "add to current group"}
+                %i.icon-plus
+              %a.pickUserTargetGroup.add-on.btn.dropdown-toggle{data-toggle: "dropdown", rel: "tooltip", title: "pick a target group"}
+                %span.caret
+              %ul.dropdown-menu.pull-right
+                %span shared groups
+                - for group in @groups
+                  %li.userDestinationGroup{data-id: group.id}
+                    %a= group.name
+        %li.divider
+        %li.nav-header shared
         - for group in @groups
           %li.group{data-id: group.id}
             %a= group.name
-              %i.addUser.icon-plus.pull-right
-  
-  %div#addUser.modal.hide
-    %div.modal-header
-      %h1 add user
-    %div.modal-body
-      %input.user-email{type: "text", placeholder: "email address"}
-    %div.modal-footer
-      %a.closeTodoPopup.btn close
-        %i.icon-remove
-      %a.createUser.btn.btn-primary add
-        %i.icon-plus.icon-white
-  
+              %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
+              
   %div.todosContainer.span3.offset1
     %h1
       %small current todos
@@ -34,11 +43,11 @@
             %a.pickTodoTargetGroup.add-on.btn.dropdown-toggle{data-toggle: "dropdown", rel: "tooltip", title: "pick a target group"}
               %span.caret
             %ul.dropdown-menu.pull-right
-              %span your groups
+              %span shared groups
               - for group in @groups
-                %li.destinationGroup{data-id: group.id}
+                %li.todoDestinationGroup{data-id: group.id}
                   %a= group.name
       - for todo in @todos
         %li{data-id: todo.id}
           %a= todo.title
-            %i.icon-trash.deleteTodo.pull-right
+            %i.icon-trash.deleteTodo.pull-right{rel: "tooltip", title: "remove"}

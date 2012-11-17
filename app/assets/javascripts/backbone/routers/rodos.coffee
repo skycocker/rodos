@@ -3,8 +3,7 @@ class Rodos.Routers.RodosRouter extends Backbone.Router
   
   routes: {
     ".*": "navStart"
-    "welcome": "welcome"
-    "home": "home"
+    "_=_": "garbageCleanup"
   }
   
   navStart: =>
@@ -15,9 +14,12 @@ class Rodos.Routers.RodosRouter extends Backbone.Router
       @home(@groups, @todos)
     else
       @welcome()
+      
+  garbageCleanup: =>
+    app.navigate("/", {trigger: true})
         
-  welcome: ->
+  welcome: =>
     @view = new Rodos.Views.Statics.WelcomeView()
 
-  home: (groups, todos) ->
+  home: (groups, todos) =>
     @view = new Rodos.Views.Statics.HomeView(groups, todos)

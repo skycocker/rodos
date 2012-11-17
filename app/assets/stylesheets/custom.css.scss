@@ -11,10 +11,7 @@ body {
   }
 }
 
-#newTodo {
-  #new-todo-title {
-    width: 74.5%;
-  }
+#newTodo, #newUser {
   .caret {
     border-top-color: #000;
   }
@@ -24,6 +21,24 @@ body {
       font-size: 1em;
       color: $grayLight;
     }
+  }
+}
+
+#newTodo {
+  #new-todo-title {
+    width: 74.5%;
+  }
+}
+
+#newGroup {
+  #new-group-name {
+    width: 82%;
+  }
+}
+
+#newUser {
+  #new-user-data {
+    width: 70%;
   }
 }
 

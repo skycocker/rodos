@@ -5,9 +5,8 @@ class TodosController < ApplicationController
   # GET /todos
   # GET /todos.json
   def index
-    current_user.groups.each do |group|
-      @todos = Todo.where(group_id: group.id)
-    end
+    @groups = current_user.group_ids    
+    @todos = Todo.where(group_id: @groups.split(',') )
         
     respond_to do |format|
       format.html # index.html.erb
