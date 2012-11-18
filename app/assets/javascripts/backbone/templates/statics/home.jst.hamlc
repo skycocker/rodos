@@ -23,6 +23,7 @@
                 - for group in @groups
                   %li.userDestinationGroup{data-id: group.id}
                     %a= group.name
+                    
         %li.divider
         %li.nav-header shared
         - for group in @groups
@@ -51,3 +52,12 @@
         %li{data-id: todo.id}
           %a= todo.title
             %i.icon-trash.deleteTodo.pull-right{rel: "tooltip", title: "remove"}
+            
+  - if @members
+    %div.membersContainer.span3.offset1
+      %h1
+        %small members
+      %ul.members.nav.nav-tabs.nav-stacked
+        - for member in @members
+          %li
+            %a= member.email

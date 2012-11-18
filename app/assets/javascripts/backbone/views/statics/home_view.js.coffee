@@ -29,11 +29,17 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     $("#statics").html(@render().el)
     
   pickGroup: (event) =>
-    $(".active").removeClass("active")
     groupEl = $(event.currentTarget)
-    groupEl.toggleClass("active")
-    
     @groupId = groupEl.data("id")
+    
+    @members = new Rodos.Collections.Members()
+    @members.fetch(
+      data:
+        group: @groupId
+      async: false
+    )
+    
+    @render(@members)
     
   createTodo: (event) =>
     clickedEl = $(event.target)
@@ -117,11 +123,18 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     clickedEl.tooltip("hide")
     @groups.remove(destinationGroup)
     
-  render: =>
-    $(@el).html(@template(
-      todos: @todos.toJSON()
-      groups: @groups.toJSON()
-    ))
+  render: (members) =>
+    if @members
+      $(@el).html(@template(
+        todos: @todos.toJSON()
+        groups: @groups.toJSON()
+        members: @members.toJSON()
+      ))
+    else
+      $(@el).html(@template(
+        todos: @todos.toJSON()
+        groups: @groups.toJSON()
+      ))
     
     $("[rel=tooltip]").tooltip()
     

@@ -9,4 +9,5 @@ Rodos::Application.routes.draw do
   resources :relationships
   resources :todos
   resources :groups
+  resources :members
 end
