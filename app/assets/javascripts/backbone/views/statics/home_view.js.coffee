@@ -49,7 +49,9 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       if @groupId
         destinationGroup = @groupId
       else
-        $('.pickTodoTargetGroup').dropdown()
+        @flash("info", "Pick a target group.")
+        $('.pickTodoTargetGroup').trigger("click")
+        return
     else
       destinationGroup = creatorEl.data("id")
       
@@ -57,14 +59,14 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       title: $('#new-todo-title').val()
       group_id: destinationGroup
     
-    $("#new-todo-title").empty()
-    clickedEl.tooltip("hide")
-    creatorEl.tooltip("hide")
+    @cleanup
       
   deleteTodo: (event) =>
-    todoEl = $(event.target).parent().parent()
+    clickedEl = $(event.target)
+    todoEl = clickedEl.parent().parent()
     todoId = todoEl.data("id")
     todo = @todos.get(todoId)
+    clickedEl.tooltip("hide")
     todo.destroy()
     
   createGroup: =>
@@ -79,7 +81,9 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       if @groupId
         destinationGroup = @groupId
       else
-        $('.pickUserTargetGroup').dropdown()
+        @flash("info", "Pick a target group.")
+        $('.pickUserTargetGroup').trigger("click")
+        return
     else
       destinationGroup = creatorEl.data("id")
       
@@ -91,24 +95,15 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @newuser.set(id: destinationGroup)
     @newuser.save({}, 
       success: (model, response) ->
-        klass = "alert-success"
-        $("#flash").html("User "+userData+" has been added to group "+destinationGroupName+".")
-        $("#flash").addClass(klass).fadeIn("fast").delay(2000).fadeOut("fast")
-        setTimeout(->
-          $("#flash").removeClass(klass)
-        , 2300)
+        @flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
+        @cleanup
       error: (model, response) ->
         switch response.status
           when 409
             status = "info"
           else
             status = "error"
-        klass = "alert-"+status
-        $("#flash").html(response.responseText)
-        $("#flash").addClass(klass).fadeIn("fast").delay(2000).fadeOut("fast")
-        setTimeout(->
-          $("#flash").removeClass(klass)
-        , 2300)
+        @flash(status, response.responseText)
     )
     
   leaveGroup: (event) =>
@@ -122,6 +117,18 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     
     clickedEl.tooltip("hide")
     @groups.remove(destinationGroup)
+    
+  flash: (type, content) =>
+    elem = $("#flash")
+    klass = "alert-"+type
+    elem.html(content).addClass(klass).fadeIn("fast").delay(2000).fadeOut("fast")
+    setTimeout(->
+      elem.removeClass(klass)
+    , 2300)
+    
+  cleanup: =>
+    $("#new-todo-title").empty()
+    $("#new-user-data").empty()
     
   render: (members) =>
     if @members

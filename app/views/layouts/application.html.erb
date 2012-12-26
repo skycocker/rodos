@@ -10,6 +10,40 @@
   <![endif]-->
 </head>
 <body>
+  <% if user_signed_in? %>
+  <div id="fb-root"></div>
+  <script>
+    /*window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '377463792337692',
+        status     : true,
+        cookie     : true,
+        xfbml      : true
+      });
+      FB.getLoginStatus(function(response) {
+        if(response.status === 'connected') {
+          FB.api('/me/groups', function(response) {
+            $.each(response.data, function(index, value) {
+              FB.api('/'+value.id+'/members', function(response) {
+                $.each(response.data, function(index, value) {
+                  console.log(value.email);
+            	});
+              });
+            });
+          });
+        }
+      });
+    };
+    (function(d, debug){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/pl_PL/all" + (debug ? "/debug" : "") + ".js";
+       ref.parentNode.insertBefore(js, ref);
+     }(document, false));*/
+  </script>
+  <% end %>
+  
   <header class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">

@@ -19,3 +19,6 @@
 
 #Ignore text editor backup files
 *~
+
+#Ignore OS X weird files
+.DS_Store
