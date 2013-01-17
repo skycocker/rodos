@@ -39,7 +39,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       async: false
     )
     
-    @render(@members)
+    @render(@members, @groupId)
     
   createTodo: (event) =>
     clickedEl = $(event.target)
@@ -50,7 +50,6 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         destinationGroup = @groupId
       else
         @flash("info", "Pick a target group.")
-        $('.pickTodoTargetGroup').trigger("click")
         return
     else
       destinationGroup = creatorEl.data("id")
@@ -82,7 +81,6 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         destinationGroup = @groupId
       else
         @flash("info", "Pick a target group.")
-        $('.pickUserTargetGroup').trigger("click")
         return
     else
       destinationGroup = creatorEl.data("id")
@@ -130,12 +128,13 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     $("#new-todo-title").empty()
     $("#new-user-data").empty()
     
-  render: (members) =>
-    if @members
+  render: (members, groupId) =>
+    if @members && @groupId
       $(@el).html(@template(
         todos: @todos.toJSON()
         groups: @groups.toJSON()
         members: @members.toJSON()
+        groupId: @groupId
       ))
     else
       $(@el).html(@template(

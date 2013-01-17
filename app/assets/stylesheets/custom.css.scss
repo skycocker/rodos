@@ -28,6 +28,9 @@ body {
   #new-todo-title {
     width: 74.5%;
   }
+  #new-todo-title.wide {
+    width: 84.5%;
+  }
 }
 
 #newGroup {
@@ -39,6 +42,9 @@ body {
 #newUser {
   #new-user-data {
     width: 70%;
+  }
+  #new-user-data.wide {
+    width: 82%;
   }
 }
 
