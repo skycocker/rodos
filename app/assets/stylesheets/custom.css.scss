@@ -39,6 +39,14 @@ body {
   }
 }
 
+li.group {
+  cursor: pointer;
+}
+
+li.group.active {
+  cursor: default;
+}
+
 #newUser {
   #new-user-data {
     width: 70%;

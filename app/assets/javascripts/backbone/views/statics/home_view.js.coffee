@@ -130,8 +130,12 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     
   render: (members, groupId) =>
     if @members && @groupId
+      selectedTodos = @todos.where({group_id: @groupId})
+      todos = _.map selectedTodos, (todo) ->
+        todo.toJSON()
+        
       $(@el).html(@template(
-        todos: @todos.toJSON()
+        todos: todos
         groups: @groups.toJSON()
         members: @members.toJSON()
         groupId: @groupId
@@ -143,6 +147,5 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       ))
     
     $("[rel=tooltip]").tooltip()
-    
     return this
     
