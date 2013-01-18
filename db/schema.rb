@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121105201255) do
+ActiveRecord::Schema.define(:version => 20130118141129) do
+
+  create_table "fb_relationships", :force => true do |t|
+    t.integer  "fb_group",    :limit => 8
+    t.integer  "rodos_group"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
 
   create_table "groups", :force => true do |t|
     t.string   "name"

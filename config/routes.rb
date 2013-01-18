@@ -7,6 +7,7 @@ Rodos::Application.routes.draw do
   match "/users/current" => 'users#current'
   
   resources :relationships
+  resources :fb_relationships
   resources :todos
   resources :groups
   resources :members

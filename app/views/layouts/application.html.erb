@@ -24,11 +24,7 @@
         if(response.status === 'connected') {
           FB.api('/me/groups', function(response) {
             $.each(response.data, function(index, value) {
-              FB.api('/'+value.id+'/members', function(response) {
-                $.each(response.data, function(index, value) {
-                  console.log(value.email);
-            	});
-              });
+              console.log(value.name);
             });
           });
         }

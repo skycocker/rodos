@@ -26,6 +26,8 @@
                 - for group in @groups
                   %li.userDestinationGroup{data-id: group.id}
                     %a= group.name
+        %li#addGroup
+          %input#fb-group-name{type: "text", placeholder: "add facebook group"}
                     
         %li.divider
         %li.nav-header shared

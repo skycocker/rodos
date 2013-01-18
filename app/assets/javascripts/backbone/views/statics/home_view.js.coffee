@@ -14,6 +14,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     "click .addUserToCurrentGroup": "addUser"
     "click .userDestinationGroup": "addUser"
     "click .leaveGroup": "leaveGroup"
+    "keyup #fb-group-name": "fbGroupSearch"
   
   initialize: (@groups, @todos) =>
     @groups.on("reset", @render)
@@ -115,6 +116,12 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     
     clickedEl.tooltip("hide")
     @groups.remove(destinationGroup)
+    
+  fbGroupSearch: (event) =>
+    inputField = $(event.target)
+    input = inputField.val()
+    
+    
     
   flash: (type, content) =>
     elem = $("#flash")
