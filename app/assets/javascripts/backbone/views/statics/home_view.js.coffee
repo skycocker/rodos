@@ -28,6 +28,13 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @todos.on("remove", @render)
     @todos.fetch()
     
+    that = this
+    setInterval ->
+      window.user.fetch()
+      that.groups.fetch()
+      that.todos.fetch()
+    , 30000
+    
     $(document).on("fbApiReady", @handleFbApi)
     
     $("#statics").html(@render().el)
