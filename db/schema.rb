@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130118141129) do
+ActiveRecord::Schema.define(:version => 20130119230615) do
 
   create_table "fb_relationships", :force => true do |t|
     t.integer  "fb_group",    :limit => 8
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(:version => 20130118141129) do
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
   end
+
+  add_index "fb_relationships", ["fb_group"], :name => "index_fb_relationships_on_fb_group"
 
   create_table "groups", :force => true do |t|
     t.string   "name"
