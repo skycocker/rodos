@@ -10,6 +10,7 @@
             %input#new-group-name{type: "text", placeholder: "new group"}
             %a.createGroup.add-on.btn
               %i.icon-plus
+        %li.divider
         %li#newUser
           %div.dropdown
             %div.input-append
@@ -27,8 +28,12 @@
                   %li.userDestinationGroup{data-id: group.id}
                     %a= group.name
         %li#addGroup
-          %input#fb-group-name{type: "text", placeholder: "add facebook group"}
-                    
+          %div.dropdown
+            - if @fbApiReady && @groupId
+              %input#fb-group-name.dropdown-toggle{data-toggle: "dropdown", type: "text", placeholder: "add facebook group", style: "display: block;"}
+            - else
+              %input#fb-group-name.dropdown-toggle{data-toggle: "dropdown", type: "text", placeholder: "add facebook group"}
+            %ul.dropdown-menu#fbGroupList
         %li.divider
         %li.nav-header shared
         - for group in @groups

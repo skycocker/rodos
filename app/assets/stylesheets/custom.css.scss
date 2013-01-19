@@ -39,7 +39,7 @@ body {
   }
 }
 
-li.group {
+li.group, .addFacebookGroup {
   cursor: pointer;
 }
 
@@ -54,6 +54,10 @@ li.group.active {
   #new-user-data.wide {
     width: 82%;
   }
+}
+
+#fb-group-name {
+  display: none;
 }
 
 .todosContainer {
@@ -97,7 +101,7 @@ footer {
     color: $green;
     text-decoration: none;
   }
-  .signature {
+  .footer-a {
     word-spacing: -1em;
     text-transform: lowercase;
     .first {
@@ -106,5 +110,9 @@ footer {
     .second {
       opacity: .9;
     }
+  }
+  .footer-b {
+    margin-left: 0.1em;
+    word-spacing: -0.2em;
   }
 }

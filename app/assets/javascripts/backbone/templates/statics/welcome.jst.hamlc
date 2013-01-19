@@ -6,7 +6,3 @@
   %a.btn.btn-primary{ href: "/users/sign_in", data-method: "get" } Sign in with email
   %a.btn{ href: "/users/sign_up", data-method: "get" } Sign up
   
-%div.row
-  %div.span3
-    %h2 Flexibility
-    %p No matter if you're using Twitter, Facebook, Github, something else, everything altogether or if you like old-schooled email login system.

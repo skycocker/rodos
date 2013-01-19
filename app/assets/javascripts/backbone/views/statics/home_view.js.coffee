@@ -14,7 +14,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     "click .addUserToCurrentGroup": "addUser"
     "click .userDestinationGroup": "addUser"
     "click .leaveGroup": "leaveGroup"
-    "keyup #fb-group-name": "fbGroupSearch"
+    #connect rodos group to facebook group
+    "click .addFacebookGroup": "addFacebookGroup"
   
   initialize: (@groups, @todos) =>
     @groups.on("reset", @render)
@@ -26,6 +27,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @todos.on("change", @render)
     @todos.on("remove", @render)
     @todos.fetch()
+    
+    $(document).on("fbApiReady", @handleFbApi)
     
     $("#statics").html(@render().el)
     
@@ -88,13 +91,14 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       
     destinationGroupName = @groups.get(destinationGroup).get("name")
     userData = $("#new-user-data").val()
+    that = this
     
     @newuser = new Rodos.Models.Relationship()
     @newuser.set(user_data: userData)
     @newuser.set(id: destinationGroup)
     @newuser.save({}, 
       success: (model, response) ->
-        @flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
+        that.flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
         @cleanup
       error: (model, response) ->
         switch response.status
@@ -102,7 +106,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
             status = "info"
           else
             status = "error"
-        @flash(status, response.responseText)
+        that.flash(status, response.responseText)
     )
     
   leaveGroup: (event) =>
@@ -117,12 +121,37 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     clickedEl.tooltip("hide")
     @groups.remove(destinationGroup)
     
+  handleFbApi: =>
+    @fbApiReady = true
+    @render()
+    $("#fb-group-name").on("keyup", @fbGroupSearch).on("focus", @fbGroupSearch)
+    
   fbGroupSearch: (event) =>
     inputField = $(event.target)
     input = inputField.val()
+    @fbGroups = $(window.fbUserGroups)
+    @selectedGroups = new Array()
     
+    $("#fbGroupList").empty()
+    @fbGroups.each ->
+      markup = "<li><a data-group-id='"+@id+"' class='addFacebookGroup dropdown-submenu'>"+@name+"</a></li>"
+      $("#fbGroupList").append(markup) unless @name.toLowerCase().indexOf(input) is -1
+      
+  addFacebookGroup: (event) =>
+    @button = $(event.target)
+    @fbGroupId = @button.data("group-id")
+    that = this
     
-    
+    @newgroup = new Rodos.Models.FbRelationship()
+    @newgroup.set(rodos_group: @groupId)
+    @newgroup.set(fb_group: @fbGroupId)
+    @newgroup.save({},
+      success: () ->
+        that.flash("success", "Group "+that.button.text()+" has been successfully connected.")
+      error: (response) ->
+        that.flash(response.status, response.responseText)
+    )
+      
   flash: (type, content) =>
     elem = $("#flash")
     klass = "alert-"+type
@@ -136,6 +165,9 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     $("#new-user-data").empty()
     
   render: (members, groupId) =>
+    if @fbApiReady is true
+      $("#fb-group-name").off("keyup", @fbGroupSearch).off("focus", @fbGroupSearch)
+    
     if @members && @groupId
       selectedTodos = @todos.where({group_id: @groupId})
       todos = _.map selectedTodos, (todo) ->
@@ -146,12 +178,21 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         groups: @groups.toJSON()
         members: @members.toJSON()
         groupId: @groupId
+        fbApiReady: @fbApiReady
       ))
     else
       $(@el).html(@template(
         todos: @todos.toJSON()
         groups: @groups.toJSON()
+        fbApiReady: @fbApiReady
       ))
+      
+    if @fbApiReady is true
+      $("#fb-group-name").on("keyup", @fbGroupSearch).on("focus", @fbGroupSearch)
+    
+    setTimeout(->
+      $(".alert").fadeOut("fast")
+    , 1800)
     
     $("[rel=tooltip]").tooltip()
     return this

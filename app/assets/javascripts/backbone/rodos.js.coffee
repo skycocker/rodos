@@ -13,6 +13,7 @@ window.Rodos =
     window.app = new Rodos.Routers.RodosRouter()
     window.user = new Rodos.Models.User()
     Backbone.history.start({pushState: true})
+    #= require 'fb_api.js.coffee'
     
 $(document).ready ->
   Rodos.init()
