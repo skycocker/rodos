@@ -4,10 +4,12 @@ class RelationshipsController < ApplicationController
   
   def destroy
     @relationship = Relationship.find_by_user_id_and_group_id(current_user.id, params[:id])
+    @destGroup = Group.find_by_id(params[:id])
     
     respond_to do |format|
       if @relationship
         @relationship.destroy
+        @destGroup.destroy if @destGroup.users.blank?
         format.json { head :no_content }
       else
         format.json { head :not_found }
