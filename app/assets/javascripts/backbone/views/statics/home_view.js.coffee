@@ -28,11 +28,10 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @todos.on("remove", @render)
     @todos.fetch()
     
-    that = this
-    setInterval ->
+    setInterval =>
       window.user.fetch()
-      that.groups.fetch()
-      that.todos.fetch()
+      @groups.fetch()
+      @todos.fetch()
     , 30000
     
     $(document).on("fbApiReady", @handleFbApi)
@@ -98,22 +97,21 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       
     destinationGroupName = @groups.get(destinationGroup).get("name")
     userData = $("#new-user-data").val()
-    that = this
     
     @newuser = new Rodos.Models.Relationship()
     @newuser.set(user_data: userData)
     @newuser.set(id: destinationGroup)
     @newuser.save({}, 
-      success: (model, response) ->
-        that.flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
+      success: (model, response) =>
+        @flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
         @cleanup
-      error: (model, response) ->
+      error: (model, response) =>
         switch response.status
           when 409
             status = "info"
           else
             status = "error"
-        that.flash(status, response.responseText)
+        @flash(status, response.responseText)
     )
     
   leaveGroup: (event) =>
@@ -147,16 +145,15 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
   addFacebookGroup: (event) =>
     @button = $(event.target)
     @fbGroupId = @button.data("group-id")
-    that = this
     
     @newgroup = new Rodos.Models.FbRelationship()
     @newgroup.set(rodos_group: @groupId)
     @newgroup.set(fb_group: @fbGroupId)
     @newgroup.save({},
-      success: () ->
-        that.flash("success", "Group "+that.button.text()+" has been successfully connected.")
-      error: (response) ->
-        that.flash(response.status, response.responseText)
+      success: () =>
+        @flash("success", "Group "+@button.text()+" has been successfully connected.")
+      error: (response) =>
+        @flash(response.status, response.responseText)
     )
       
   flash: (type, content) =>
