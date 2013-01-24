@@ -13,6 +13,9 @@
 # Ignore the database config
 /config/database.yml
 
+#Ignore Heroku pusher configuration
+/config/environments/pusher_configuration.rb
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp

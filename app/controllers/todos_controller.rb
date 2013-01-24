@@ -50,6 +50,7 @@ class TodosController < ApplicationController
       if @todo.save
         format.html { redirect_to @todo, notice: 'Todo was successfully created.' }
         format.json { render json: @todo, status: :created, location: @todo }
+        Pusher['group-'+@todo.group_id.to_s].trigger('newTodo', { todo: @todo })
       else
         format.html { render action: "new" }
         format.json { render json: @todo.errors, status: :unprocessable_entity }
