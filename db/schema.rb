@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130119230615) do
+ActiveRecord::Schema.define(:version => 20130123215925) do
 
   create_table "fb_relationships", :force => true do |t|
     t.integer  "fb_group",    :limit => 8
@@ -27,6 +27,15 @@ ActiveRecord::Schema.define(:version => 20130119230615) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "participants", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "todo_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "participants", ["todo_id"], :name => "index_participants_on_todo_id"
 
   create_table "relationships", :force => true do |t|
     t.integer  "user_id"

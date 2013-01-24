@@ -10,4 +10,5 @@ Rodos::Application.routes.draw do
   resources :todos
   resources :groups
   resources :members
+  resources :participants
 end

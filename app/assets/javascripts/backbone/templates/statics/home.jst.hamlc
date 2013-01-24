@@ -14,7 +14,7 @@
         %li#newUser
           %div.dropdown
             %div.input-append
-              - if @members
+              - if @groupId
                 %input#new-user-data{type: "text", placeholder: "add user"}
                 %a.addUserToCurrentGroup.add-on.btn{rel: "tooltip", title: "add to current group"}
                   %i.icon-plus
@@ -53,7 +53,7 @@
       %li#newTodo
         %div.dropdown
           %div.input-append
-            - if @members
+            - if @groupId
               %input#new-todo-title{type: "text", placeholder: "new todo"}
               %a.addTodoToCurrentGroup.add-on.btn{rel: "tooltip", title: "save to current group"}
                 %i.icon-plus
@@ -68,10 +68,11 @@
                   %a= group.name
       - for todo in @todos
         %li{data-id: todo.id}
-          %a= todo.title
-            %i.icon-trash.deleteTodo.pull-right{rel: "tooltip", title: "remove"}
+          %a.todoTitle= todo.title
+            %i.icon-ok.manageTodo.toggleTodoDone.pull-right
+            %i.icon-trash.manageTodo.deleteTodo.pull-left{rel: "tooltip", title: "remove"}
             
-  - if @members
+  - if @groupId
     %div.membersContainer.span3.offset1
       %h1
         %small members

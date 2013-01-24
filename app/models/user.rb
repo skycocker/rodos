@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   
   has_many :relationships, dependent: :destroy #does not work
   has_many :groups, through: :relationships
+  has_many :todos, through: :participants
   
   before_save :ensure_authentication_token!
   

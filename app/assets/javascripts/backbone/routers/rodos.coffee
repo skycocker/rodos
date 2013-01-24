@@ -9,9 +9,11 @@ class Rodos.Routers.RodosRouter extends Backbone.Router
   navStart: =>
     if user.id != ""
       @groups = new Rodos.Collections.Groups()
+      @members = new Rodos.Collections.Members()
       @todos = new Rodos.Collections.Todos()
+      @participants = new Rodos.Collections.Participants()
       
-      @home(@groups, @todos)
+      @home(@groups, @members, @todos, @participants)
     else
       @welcome()
       
@@ -21,5 +23,5 @@ class Rodos.Routers.RodosRouter extends Backbone.Router
   welcome: =>
     @view = new Rodos.Views.Statics.WelcomeView()
 
-  home: (groups, todos) =>
-    @view = new Rodos.Views.Statics.HomeView(groups, todos)
+  home: (groups, members, todos, participants) =>
+    @view = new Rodos.Views.Statics.HomeView(groups, members, todos, participants)

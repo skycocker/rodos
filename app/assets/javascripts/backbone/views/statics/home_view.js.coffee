@@ -9,6 +9,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     "click .addTodoToCurrentGroup": "createTodo"
     "click .todoDestinationGroup": "createTodo"
     "click .deleteTodo": "deleteTodo"
+    "mouseover .toggleTodoDone": "showParticipants"
+    "click .toggleTodoDone": "toggleTodoDone"
     #modify groups
     "click .createGroup": "createGroup"
     "click .addUserToCurrentGroup": "addUser"
@@ -17,16 +19,27 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     #connect rodos group to facebook group
     "click .addFacebookGroup": "addFacebookGroup"
   
-  initialize: (@groups, @todos) =>
+  initialize: (@groups, @members, @todos, @participants) =>
     @groups.on("reset", @render)
     @groups.on("change", @render)
     @groups.on("remove", @render)
     @groups.fetch()
     
+    @members.on("reset", @render)
+    @members.on("change", @render)
+    @members.on("remove", @render)
+    @members.fetch()
+    
     @todos.on("reset", @render)
     @todos.on("change", @render)
     @todos.on("remove", @render)
     @todos.fetch()
+    
+    @participants.on("reset", @render)
+    @participants.on("change", @render)
+    @participants.on("add", @render)
+    @participants.on("remove", @render)
+    @participants.fetch()
     
     setInterval =>
       window.user.fetch()
@@ -42,14 +55,12 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     groupEl = $(event.currentTarget)
     @groupId = groupEl.data("id")
     
-    @members = new Rodos.Collections.Members()
-    @members.fetch(
-      data:
-        group: @groupId
-      async: false
+    @members.fetch({
+        groupId: @groupId
+      },
+      success: =>
+        @render(@groupId)
     )
-    
-    @render(@members, @groupId)
     
   createTodo: (event) =>
     clickedEl = $(event.target)
@@ -155,7 +166,54 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       error: (response) =>
         @flash(response.status, response.responseText)
     )
-      
+    
+  showParticipants: (event) =>
+    @tick = $(event.target)
+    @todo = @tick.closest("li")
+    @todoId = @todo.data("id")
+    
+    prependedMarkup = "click to mark as done<br>already done by "
+    markup = ""
+    @doneCounter = 0
+    
+    @selectedParticipants = @participants.where(todo_id: @todoId)
+    _.each @selectedParticipants, (participant) =>
+      @participatingMembers = @members.where(id: participant.get("user_id"))
+      _.each @participatingMembers, (member) =>
+        ++@doneCounter
+        @participantEmail = member.get("email")
+        if window.user.get("id") is member.id
+          prependedMarkup = "click to unmark as done<br>already done by "
+          markup += "<br>you ("+@participantEmail+")"
+        else
+          markup += "<br>"+member.get("email")
+    switch @doneCounter
+      when 0
+        markup = "click to mark as done<br>nobody has done this yet"
+      when 1
+        appendedMarkup = "person:"
+        markup = prependedMarkup + @doneCounter + " " + appendedMarkup + markup
+      else
+        appendedMarkup = "people:"
+        markup = prependedMarkup + @doneCounter + " " + appendedMarkup + markup
+    @tick.tooltip({html: true, title: markup})
+    @tick.tooltip("show")
+    
+  toggleTodoDone: (event) ->
+    @tick = $(event.target)
+    @todo = @tick.closest("li")
+    @todoId = @todo.data("id")
+    
+    @selectedParticipants = @participants.where({ todo_id: @todoId, user_id: window.user.id })
+    @notExists = _.isEmpty @selectedParticipants
+    if @notExists
+      @participants.create
+        todo_id: @todoId
+        user_id: window.user.id
+    else
+      @existing = @participants.get(@selectedParticipants[0])
+      @existing.destroy()
+    
   flash: (type, content) =>
     elem = $("#flash")
     klass = "alert-"+type
@@ -168,11 +226,11 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     $("#new-todo-title").empty()
     $("#new-user-data").empty()
     
-  render: (members, groupId) =>
+  render: (groupId) =>
     if @fbApiReady is true
       $("#fb-group-name").off("keyup", @fbGroupSearch).off("focus", @fbGroupSearch)
     
-    if @members && @groupId
+    if @groupId
       selectedTodos = @todos.where({group_id: @groupId})
       todos = _.map selectedTodos, (todo) ->
         todo.toJSON()
@@ -181,6 +239,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         todos: todos
         groups: @groups.toJSON()
         members: @members.toJSON()
+        participants: @participants.toJSON()
         groupId: @groupId
         fbApiReady: @fbApiReady
       ))
@@ -188,6 +247,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       $(@el).html(@template(
         todos: @todos.toJSON()
         groups: @groups.toJSON()
+        members: @members.toJSON()
+        participants: @participants.toJSON()
         fbApiReady: @fbApiReady
       ))
       

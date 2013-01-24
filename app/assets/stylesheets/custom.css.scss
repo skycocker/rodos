@@ -39,7 +39,7 @@ body {
   }
 }
 
-li.group, .addFacebookGroup {
+li.group, .addFacebookGroup, .manageTodo {
   cursor: pointer;
 }
 
@@ -71,6 +71,9 @@ li.group.active {
 ul {
   a, a:hover {
     color: $linkColor;
+  }
+  a.todoTitle {
+    text-align: center;
   }
 }
 
