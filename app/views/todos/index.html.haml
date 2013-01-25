@@ -1,7 +1,0 @@
-%div#todos
-
-:javascript
-  $(function() {
-    window.router = new Rodos.Routers.TodosRouter({todos: #{@todos.to_json.html_safe}});
-    Backbone.history.start();
-  });

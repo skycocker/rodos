@@ -1,7 +1,0 @@
-%div.userlist
-  %div= button_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook), method: :get, class: 'btn btn-primary'
-  %div= button_to "Sign in with email", new_user_session_path, method: :get, class: 'btn btn-primary'
-  %div= button_to "Sign up", new_user_registration_path, method: :get, class: 'btn'
-  %ul
-  - for @user in @users
-    %li= @user.to_json
