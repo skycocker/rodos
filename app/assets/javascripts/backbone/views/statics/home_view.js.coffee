@@ -22,8 +22,9 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
   initialize: (@groups, @members, @todos, @participants) =>
     @channels = []
     @groups.on("reset", @handlePusherAndRender)
-    @groups.on("change", @render)
-    @groups.on("remove", @render)
+    @groups.on("change", @handlePusherAndRender)
+    @groups.on("add", @handlePusherAndRender)
+    @groups.on("remove", @handlePusherAndRender)
     @groups.fetch()
     
     @members.on("reset", @render)
@@ -58,6 +59,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     groupEl = $(event.currentTarget)
     @groupId = groupEl.data("id")
     
+    @todos.fetch()
     @members.fetch({data: {
         group_id: @groupId
       }},
@@ -211,7 +213,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @selectedParticipants = @participants.where({ todo_id: @todoId, user_id: window.user.id })
     @notExists = _.isEmpty @selectedParticipants
     if @notExists
-      @participants.create
+      @newparticipant = new Rodos.Models.Participant()
+      @newparticipant.save
         todo_id: @todoId
         user_id: window.user.id
     else
@@ -225,14 +228,26 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @groups.get(todo.group_id).set(seen: false)
     
     @notify("New todo!", [@todos, @groups])
+    
+  receivePushedParticipant: (participant) =>
+    @participants.add(participant)
       
   handlePusherAndRender: =>
     @groups.each (group) =>
-      @groupId = group.id
-      if  _.isEmpty @channels[@groupId]
-        @channels[@groupId] = window.pusher.subscribe( 'group-' + @groupId )
-        @channels[@groupId].bind('newTodo', (data) =>
+      groupId = group.id
+      if  _.isEmpty @channels[groupId]
+        @channels[groupId] = window.pusher.subscribe( 'group-' + groupId )
+        @channels[groupId].bind('newTodo', (data) =>
           @receivePushedTodo(data.todo)
+        )
+        @channels[groupId].bind('removedTodo', (data) =>
+          @todos.remove(data.todo)
+        )
+        @channels[groupId].bind('newParticipant', (data) =>
+          @receivePushedParticipant(data.participant)
+        )
+        @channels[groupId].bind('removedParticipant', (data) =>
+          @participants.remove(data.participant)
         )
     @render()
     

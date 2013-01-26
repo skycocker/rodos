@@ -26,6 +26,7 @@ class ParticipantsController < ApplicationController
         @participant = Participant.find_by_todo_id_and_user_id(@todo.id, current_user.id)
         
         if @participant.destroy
+          Pusher['group-'+@todo.group_id.to_s].trigger('removedParticipant', { participant: @participant })
           format.json { head :no_content }
         end
       else
@@ -40,6 +41,7 @@ class ParticipantsController < ApplicationController
         @participant = Participant.new(todo_id: @todo.id, user_id: current_user.id)
         
         if @participant.save
+          Pusher['group-'+@todo.group_id.to_s].trigger('newParticipant', { participant: @participant })
           format.json { render json: @participant, status: :created, location: @participant }
         else
           format.json { head :unprocessable_entity }

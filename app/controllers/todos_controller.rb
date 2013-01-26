@@ -48,9 +48,9 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       if @todo.save
+        Pusher['group-'+@todo.group_id.to_s].trigger('newTodo', { todo: @todo })
         format.html { redirect_to @todo, notice: 'Todo was successfully created.' }
         format.json { render json: @todo, status: :created, location: @todo }
-        Pusher['group-'+@todo.group_id.to_s].trigger('newTodo', { todo: @todo })
       else
         format.html { render action: "new" }
         format.json { render json: @todo.errors, status: :unprocessable_entity }
@@ -81,6 +81,7 @@ class TodosController < ApplicationController
     @todo.destroy
 
     respond_to do |format|
+      Pusher['group-'+@todo.group_id.to_s].trigger('removedTodo', { todo: @todo })
       format.html { redirect_to todos_url }
       format.json { head :no_content }
     end
