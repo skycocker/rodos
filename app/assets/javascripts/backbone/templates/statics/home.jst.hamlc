@@ -38,13 +38,23 @@
         %li.nav-header shared
         - for group in @groups
           - if group.id == @groupId
-            %li.group.active{data-id: group.id}
-              %a= group.name
-                %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
+            - if group.seen == false
+              %li.group.active.unseen{data-id: group.id}
+                %a= group.name
+                  %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
+            - else
+              %li.group.active{data-id: group.id}
+                %a= group.name
+                  %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
           - else
-            %li.group{data-id: group.id}
-              %a= group.name
-                %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
+            - if group.seen == false
+              %li.group.unseen{data-id: group.id}
+                %a= group.name
+                  %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
+            - else
+              %li.group{data-id: group.id}
+                %a= group.name
+                  %i.leaveGroup.icon-remove.pull-right{rel: "tooltip", title: "leave"}
               
   %div.todosContainer.span3.offset1
     %h1
@@ -68,9 +78,14 @@
                   %a= group.name
       - for todo in @todos
         %li{data-id: todo.id}
-          %a.todoTitle= todo.title
-            %i.icon-ok.manageTodo.toggleTodoDone.pull-right
-            %i.icon-trash.manageTodo.deleteTodo.pull-left{rel: "tooltip", title: "remove"}
+          - if todo.seen == false
+            %a.todoTitle.unseen= todo.title
+              %i.icon-ok.manageTodo.toggleTodoDone.pull-right
+              %i.icon-trash.manageTodo.deleteTodo.pull-left{rel: "tooltip", title: "remove"}
+          - else
+            %a.todoTitle= todo.title
+              %i.icon-ok.manageTodo.toggleTodoDone.pull-right
+              %i.icon-trash.manageTodo.deleteTodo.pull-left{rel: "tooltip", title: "remove"}
             
   - if @groupId
     %div.membersContainer.span3.offset1

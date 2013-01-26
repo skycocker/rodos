@@ -47,6 +47,10 @@ li.group.active {
   cursor: default;
 }
 
+li.group.unseen a {
+  background-color: $errorText;
+}
+
 #newUser {
   #new-user-data {
     width: 70%;
@@ -74,6 +78,9 @@ ul {
   }
   a.todoTitle {
     text-align: center;
+  }
+  .unseen {
+      background-color: $infoBackground;
   }
 }
 

@@ -20,7 +20,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     "click .addFacebookGroup": "addFacebookGroup"
   
   initialize: (@groups, @members, @todos, @participants) =>
-    @groups.on("reset", @render)
+    @channels = []
+    @groups.on("reset", @handlePusherAndRender)
     @groups.on("change", @render)
     @groups.on("remove", @render)
     @groups.fetch()
@@ -32,6 +33,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     
     @todos.on("reset", @render)
     @todos.on("change", @render)
+    @todos.on("add", @render)
     @todos.on("remove", @render)
     @todos.fetch()
     
@@ -44,10 +46,11 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     setInterval =>
       window.user.fetch()
       @groups.fetch()
-      @todos.fetch()
-    , 30000
+    , 60000
     
     $(document).on("fbApiReady", @handleFbApi)
+    
+    @incomingTodoSound = new Audio("assets/incomingTodo.ogg")
     
     $("#statics").html(@render().el)
     
@@ -75,11 +78,12 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     else
       destinationGroup = creatorEl.data("id")
       
-    @todos.create
+    @newtodo = new Rodos.Models.Todo()
+    @newtodo.save
       title: $('#new-todo-title').val()
       group_id: destinationGroup
     
-    @cleanup
+    @cleanup()
       
   deleteTodo: (event) =>
     clickedEl = $(event.target)
@@ -115,7 +119,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @newuser.save({}, 
       success: (model, response) =>
         @flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
-        @cleanup
+        @cleanup()
       error: (model, response) =>
         switch response.status
           when 409
@@ -213,7 +217,43 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     else
       @existing = @participants.get(@selectedParticipants[0])
       @existing.destroy()
+      
+  receivePushedTodo: (todo) =>
+    @todos.add(todo)
     
+    @todos.get(todo).set(seen: false)
+    @groups.get(todo.group_id).set(seen: false)
+    
+    @notify("New todo!", [@todos, @groups])
+      
+  handlePusherAndRender: =>
+    @groups.each (group) =>
+      @groupId = group.id
+      if  _.isEmpty @channels[@groupId]
+        @channels[@groupId] = window.pusher.subscribe( 'group-' + @groupId )
+        @channels[@groupId].bind('newTodo', (data) =>
+          @receivePushedTodo(data.todo)
+        )
+    @render()
+    
+  notify: (content, collections) =>
+    @incomingTodoSound.play()
+    document.title = content + " - Rodos"
+    document.onmousemove = =>
+      document.title = "Rodos"
+      setTimeout =>
+        $(".unseen > a").animate({ backgroundColor: '#0088CC' }, 300)
+        $(".unseen").animate({ backgroundColor: '#fff' }, 900)
+        setTimeout =>
+          $.each collections, (index, value) =>
+            @markCollectionSeen(value)
+        , 900
+      , 900
+      
+  markCollectionSeen: (collection) =>
+    collection.each (model) ->
+      model.set(seen: true)
+      
   flash: (type, content) =>
     elem = $("#flash")
     klass = "alert-"+type
@@ -223,8 +263,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     , 2300)
     
   cleanup: =>
-    $("#new-todo-title").empty()
-    $("#new-user-data").empty()
+    $("#new-todo-title").val("")
+    $("#new-user-data").val("")
     
   render: (groupId) =>
     if @fbApiReady is true

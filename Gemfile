@@ -21,6 +21,8 @@ gem 'omniauth-facebook'
 gem 'koala'
 #Heroku pusher
 gem 'pusher'
+#jQuery UI
+gem 'jquery-ui-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
