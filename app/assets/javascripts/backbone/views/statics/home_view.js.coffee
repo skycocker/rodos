@@ -58,9 +58,9 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     groupEl = $(event.currentTarget)
     @groupId = groupEl.data("id")
     
-    @members.fetch({
-        groupId: @groupId
-      },
+    @members.fetch({data: {
+        group_id: @groupId
+      }},
       success: =>
         @render(@groupId)
     )
