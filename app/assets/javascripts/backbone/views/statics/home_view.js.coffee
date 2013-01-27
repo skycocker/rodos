@@ -121,7 +121,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     @newuser.save({}, 
       success: (model, response) =>
         @flash("success", "User "+userData+" has been added to group "+destinationGroupName+".")
-        @cleanup()
+        @members.add({ email: userData, group_id: destinationGroup })
+        @render()
       error: (model, response) =>
         switch response.status
           when 409
@@ -291,6 +292,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         todo.toJSON()
         
       $(@el).html(@template(
+        currentUser: window.user.id
         todos: todos
         groups: @groups.toJSON()
         members: @members.toJSON()
@@ -300,6 +302,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
       ))
     else
       $(@el).html(@template(
+        currentUser: window.user.id
         todos: @todos.toJSON()
         groups: @groups.toJSON()
         members: @members.toJSON()

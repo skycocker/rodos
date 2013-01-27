@@ -83,7 +83,11 @@
               %i.icon-ok.manageTodo.toggleTodoDone.pull-right
               %i.icon-trash.manageTodo.deleteTodo.pull-left{rel: "tooltip", title: "remove"}
           - else
-            %a.todoTitle= todo.title
+            - for participant in @participants
+              - if participant.todo_id == todo.id and participant.user_id == @currentUser
+                -todoClass = "todoDone"
+            %a.todoTitle{class: todoClass}= todo.title
+              -todoClass = ""
               %i.icon-ok.manageTodo.toggleTodoDone.pull-right
               %i.icon-trash.manageTodo.deleteTodo.pull-left{rel: "tooltip", title: "remove"}
             

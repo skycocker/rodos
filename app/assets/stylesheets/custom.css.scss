@@ -80,7 +80,13 @@ ul {
     text-align: center;
   }
   .unseen {
-      background-color: $infoBackground;
+    background-color: $infoBackground;
+  }
+  .todoDone {
+    background-color: $successBackground;
+  }
+  a.todoDone:hover {
+    background-color: #E9F5E4;
   }
 }
 
