@@ -8,6 +8,7 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     "click .group": "pickGroup"
     "click .addTodoToCurrentGroup": "createTodo"
     "click .todoDestinationGroup": "createTodo"
+    "keypress #new-todo-title": "addTodoWithEnter"
     "click .deleteTodo": "deleteTodo"
     "mouseover .toggleTodoDone": "showParticipants"
     "click .toggleTodoDone": "toggleTodoDone"
@@ -71,14 +72,13 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     clickedEl = $(event.target)
     creatorEl = clickedEl.parent()
     
-    if clickedEl.hasClass("addTodoToCurrentGroup") || creatorEl.hasClass("addTodoToCurrentGroup")
-      if @groupId
-        destinationGroup = @groupId
-      else
-        @flash("info", "Pick a target group.")
-        return
-    else
+    if @groupId
+      destinationGroup = @groupId
+    else if creatorEl.data("id")
       destinationGroup = creatorEl.data("id")
+    else
+      @flash("info", "Pick a target group.")
+      return
       
     @newtodo = new Rodos.Models.Todo()
     @newtodo.save
@@ -96,8 +96,13 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
     todo.destroy()
     
   createGroup: =>
-    @groups.create
-      name: $("#new-group-name").val()
+    @groups.create({
+        name: $("#new-group-name").val()
+      }
+      success: (model, response) =>
+        @groupId = response.id
+        @render()
+    )
     
   addUser: (event) =>
     clickedEl = $(event.target)
@@ -252,6 +257,10 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         )
     @render()
     
+  addTodoWithEnter: (event) =>
+    return if event.keyCode isnt 13
+    @createTodo(event)
+    
   notify: (content, collections) =>
     @incomingTodoSound.play()
     document.title = content + " - Rodos"
@@ -300,6 +309,8 @@ class Rodos.Views.Statics.HomeView extends Backbone.View
         groupId: @groupId
         fbApiReady: @fbApiReady
       ))
+      
+      $("#new-todo-title").focus()
     else
       $(@el).html(@template(
         currentUser: window.user.id
